@@ -16,6 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
 
         let tabBarController = TabBarController()
+        //범위 확인 임시 코드
+        tabBarController.tabBar.backgroundColor = .blue
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
         self.window = window
