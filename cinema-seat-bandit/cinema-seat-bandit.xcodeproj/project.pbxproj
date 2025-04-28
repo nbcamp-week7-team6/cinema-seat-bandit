@@ -21,7 +21,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Application/Info.plist,
-				Domain/UseCases/.gitkeep,
+				ViewModel/.gitkeep,
 			);
 			target = F489AB362DBB7939009B2401 /* cinema-seat-bandit */;
 		};
