@@ -21,32 +21,17 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Application/Info.plist,
-				Domain/UseCases/.gitkeep,
-				Model/.gitkeep,
-				Service/.gitkeep,
-				Utility/.gitkeep,
 				ViewModel/.gitkeep,
 			);
 			target = F489AB362DBB7939009B2401 /* cinema-seat-bandit */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		F489ABDB2DBB84F0009B2401 /* Exceptions for "cinema-seat-bandit" folder in "Compile Sources" phase from "cinema-seat-bandit" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = F489AB332DBB7939009B2401 /* Sources */;
-			membershipExceptions = (
-				Service/.gitkeep,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F489AB392DBB7939009B2401 /* cinema-seat-bandit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				F489AB492DBB793A009B2401 /* Exceptions for "cinema-seat-bandit" folder in "cinema-seat-bandit" target */,
-				F489ABDB2DBB84F0009B2401 /* Exceptions for "cinema-seat-bandit" folder in "Compile Sources" phase from "cinema-seat-bandit" target */,
 			);
 			path = "cinema-seat-bandit";
 			sourceTree = "<group>";

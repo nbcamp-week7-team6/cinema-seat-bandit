@@ -14,9 +14,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-
-//        window.rootViewController = UINavigationController(rootViewController: ViewController())
-        window.rootViewController = UINavigationController(rootViewController: AuthViewController())
+        let tabBarController = TabBarController()
+        //범위 확인 임시 코드
+        tabBarController.tabBar.backgroundColor = .blue
+        window.rootViewController = tabBarController
         window.makeKeyAndVisible()
         self.window = window
     }
