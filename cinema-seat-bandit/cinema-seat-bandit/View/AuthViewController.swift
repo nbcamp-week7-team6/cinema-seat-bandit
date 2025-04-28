@@ -19,6 +19,7 @@ final class AuthViewController: UIViewController {
         setupConstraints()
         bindViewModel()
         setupActions()
+        setupTextFieldActions()
     }
     
     private func setupViews() {
@@ -37,6 +38,11 @@ final class AuthViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        viewModel.isFormValid.bind { [weak self] isValid in
+            self?.authView.authActionButton.isEnabled = isValid
+            self?.authView.authActionButton.alpha = isValid ? 1.0 : 0.2
+        }
+        
         viewModel.signupSuccess.bind { [weak self] isSuccess in
             guard let self else { return }
             
@@ -67,8 +73,6 @@ final class AuthViewController: UIViewController {
             case .login:
                 print("로그인 실패: \(message)")
             }
-            
-            
         }
     }
     
@@ -88,4 +92,38 @@ final class AuthViewController: UIViewController {
             viewModel.login(email: email, password: password)
         }
     }
+    
+    private func setupTextFieldActions() {
+        [
+            authView.emailTextField,
+            authView.passwordTextField,
+            authView.confirmPasswordTextField
+        ].forEach {
+            $0.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        }
+    }
+    
+    @objc private func textFieldDidChange(_ sender: UITextField) {
+        let email = authView.emailTextField.text ?? ""
+        let password = authView.passwordTextField.text ?? ""
+        let confirmPassword = authView.confirmPasswordTextField.text ?? ""
+        
+        switch sender {
+        case authView.emailTextField:
+            viewModel.validateEmail(email)
+        case authView.passwordTextField:
+            viewModel.validatePassword(password)
+            if authView.mode == .signup {
+                viewModel.validatePasswordMatch(password, confirmPassword)
+            }
+        case authView.confirmPasswordTextField:
+            viewModel.validatePasswordMatch(password, confirmPassword)
+        default:
+            break
+        }
+    }
+    
+//    private func showSignupCompleteAlert() {
+//        let alert = UIAlertAction(title: <#T##String?#>, style: <#T##UIAlertAction.Style#>, handler: <#T##((UIAlertAction) -> Void)?##((UIAlertAction) -> Void)?##(UIAlertAction) -> Void#>)
+//    }
 }
