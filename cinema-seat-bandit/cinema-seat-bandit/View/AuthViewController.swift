@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class AuthViewController: UIViewController {
-    private let authViewModel = AuthViewModel()
+    private let viewModel = AuthViewModel()
     private let authView = AuthView()
 
     override func viewDidLoad() {
@@ -37,7 +37,7 @@ final class AuthViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        authViewModel.signupSuccess.bind { [weak self] isSuccess in
+        viewModel.signupSuccess.bind { [weak self] isSuccess in
             guard let self else { return }
             
             if isSuccess {
@@ -46,11 +46,29 @@ final class AuthViewController: UIViewController {
             }
         }
         
-        authViewModel.errorMessage.bind { [weak self] errorMessage in
-            guard let self, let errorMessage else { return }
+        viewModel.loginSuccess.bind { [weak self] isSuccess in
+            guard let self else { return }
             
-            print("회원가입 실패: \(errorMessage)")
-            // 회원가입 실패 이후 수행할 작업
+            if isSuccess {
+                print("로그인 성공")
+                // 로그인 이후 수행할 작업
+            }
+        }
+        
+        viewModel.errorMessage.bind { [weak self] authError in
+            guard let self, let authError else { return }
+            
+            let (type, message) = authError
+            
+            switch type {
+            case .signup:
+                print("회원가입 실패: \(message)")
+                // 회원가입 실패 이후 수행할 작업
+            case .login:
+                print("로그인 실패: \(message)")
+            }
+            
+            
         }
     }
     
@@ -60,7 +78,14 @@ final class AuthViewController: UIViewController {
     
     @objc private func authActionButtonTapped() {
         let email = authView.emailTextField.text ?? ""
-        let password = authView.confirmPasswordTextField.text ?? ""
-        authViewModel.signup(email: email, password: password)
+        let password = authView.passwordTextField.text ?? ""
+        let confirmPassword = authView.confirmPasswordTextField.text ?? ""
+        
+        switch authView.mode {
+        case .signup:
+            viewModel.signup(email: email, password: confirmPassword)
+        case .login:
+            viewModel.login(email: email, password: password)
+        }
     }
 }

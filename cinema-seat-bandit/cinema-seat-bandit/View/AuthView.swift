@@ -49,7 +49,7 @@ final class AuthView: UIView {
         return label
     }()
     
-    private let passwordTextField: UITextField = {
+    let passwordTextField: UITextField = {
         let textField = PaddedTextField()
         textField.placeholder = "비밀번호를 입력하세요."
         textField.borderStyle = .roundedRect
