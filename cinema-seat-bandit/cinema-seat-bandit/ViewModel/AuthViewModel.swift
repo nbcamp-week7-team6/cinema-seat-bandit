@@ -51,7 +51,7 @@ final class AuthViewModel {
         }
     }
     
-    private func updateMode(_ mode: AuthMode) {
+    func updateMode(_ mode: AuthMode) {
         self.mode = mode
         updateFormValidation()
     }

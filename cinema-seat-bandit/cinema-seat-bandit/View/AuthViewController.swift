@@ -40,15 +40,14 @@ final class AuthViewController: UIViewController {
     private func bindViewModel() {
         viewModel.isFormValid.bind { [weak self] isValid in
             self?.authView.authActionButton.isEnabled = isValid
-            self?.authView.authActionButton.alpha = isValid ? 1.0 : 0.2
+            self?.authView.authActionButton.alpha = isValid ? 1.0 : 0.1
         }
         
         viewModel.signupSuccess.bind { [weak self] isSuccess in
             guard let self else { return }
             
             if isSuccess {
-                print("회원가입 성공")
-                // 회원가입 이후 수행할 작업
+                self.showSignupCompleteAlert()
             }
         }
         
@@ -123,7 +122,19 @@ final class AuthViewController: UIViewController {
         }
     }
     
-//    private func showSignupCompleteAlert() {
-//        let alert = UIAlertAction(title: <#T##String?#>, style: <#T##UIAlertAction.Style#>, handler: <#T##((UIAlertAction) -> Void)?##((UIAlertAction) -> Void)?##(UIAlertAction) -> Void#>)
-//    }
+    private func showSignupCompleteAlert() {
+        let alert = UIAlertController(title: "회원가입 완료", message: "로그인 후 이용해주세요.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+            self?.switchToLoginMode()
+        }))
+        present(alert, animated: true)
+    }
+    
+    private func switchToLoginMode() {
+        authView.mode = .login
+        viewModel.updateMode(.login)
+        
+        authView.passwordTextField.text = ""
+        authView.confirmPasswordTextField.text = ""
+    }
 }
