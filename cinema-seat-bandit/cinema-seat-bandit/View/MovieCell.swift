@@ -8,9 +8,6 @@
 import UIKit
 import SnapKit
 
-import UIKit
-import SnapKit
-
 final class MovieCell: UICollectionViewCell {
     static let identifier = "MovieCell"
 
