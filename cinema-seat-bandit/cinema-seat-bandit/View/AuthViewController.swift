@@ -55,8 +55,7 @@ final class AuthViewController: UIViewController {
             guard let self else { return }
             
             if isSuccess {
-                print("로그인 성공")
-                // 로그인 이후 수행할 작업
+                self.moveToTabBar()
             }
         }
         
@@ -136,5 +135,17 @@ final class AuthViewController: UIViewController {
         
         authView.passwordTextField.text = ""
         authView.confirmPasswordTextField.text = ""
+    }
+    
+    private func moveToTabBar() {
+        let tabBarController = TabBarController()
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let sceneDelegate = windowScene.delegate as? UIWindowSceneDelegate,
+           let window = (sceneDelegate as? NSObject)?.value(forKey: "window") as? UIWindow {
+            
+            window.rootViewController = tabBarController
+            window.makeKeyAndVisible()
+        }
     }
 }
