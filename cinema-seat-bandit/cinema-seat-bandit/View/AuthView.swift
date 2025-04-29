@@ -92,7 +92,7 @@ final class AuthView: UIView {
         return label
     }()
     
-    private let authSwitchButton: UIButton = {
+    let authSwitchButton: UIButton = {
         let button = UIButton()
         button.setTitle("회원가입", for: .normal)
         button.setTitleColor(.link, for: .normal)
@@ -154,8 +154,6 @@ final class AuthView: UIView {
             authActionButton,
             authSwitchStackView
         ].forEach { addSubview($0) }
-        
-        authSwitchButton.addTarget(self, action: #selector(authSwitchButtonTapped), for: .touchUpInside)
     }
     
     private func setupConstraints() {
@@ -193,9 +191,5 @@ final class AuthView: UIView {
             $0.bottom.equalToSuperview().inset(32)
             $0.centerX.equalToSuperview()
         }
-    }
-    
-    @objc private func authSwitchButtonTapped() {
-        mode == .login ? (mode = .signup) : (mode = .login)
     }
 }

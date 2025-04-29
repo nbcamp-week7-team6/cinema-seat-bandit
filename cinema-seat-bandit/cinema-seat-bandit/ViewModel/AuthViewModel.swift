@@ -34,15 +34,18 @@ final class AuthViewModel {
     
     func validatePassword(_ password: String) {
         isPasswordValid.value = password.count >= 8
-        updateFormValidation()
     }
     
     func validatePasswordMatch(_ password: String, _ confirmPassword: String) {
+        guard !confirmPassword.isEmpty else {
+            isPasswordMatch.value = false
+            return
+        }
+        
         isPasswordMatch.value = password == confirmPassword
-        updateFormValidation()
     }
     
-    private func updateFormValidation() {
+    func updateFormValidation() {
         switch mode {
         case .login:
             isFormValid.value = isEmailValid.value && isPasswordValid.value

@@ -25,9 +25,7 @@ final class AuthViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
         
-        [authView].forEach {
-            view.addSubview($0)
-        }
+        view.addSubview(authView)
     }
     
     private func setupConstraints() {
@@ -70,12 +68,14 @@ final class AuthViewController: UIViewController {
                 // 회원가입 실패 이후 수행할 작업
             case .login:
                 print("로그인 실패: \(message)")
+                // 로그인 실패 이후 수행할 작업
             }
         }
     }
     
     private func setupActions() {
         authView.authActionButton.addTarget(self, action: #selector(authActionButtonTapped), for: .touchUpInside)
+        authView.authSwitchButton.addTarget(self, action: #selector(authSwitchButtonTapped), for: .touchUpInside)
     }
     
     @objc private func authActionButtonTapped() {
@@ -88,6 +88,16 @@ final class AuthViewController: UIViewController {
             viewModel.signup(email: email, password: confirmPassword)
         case .login:
             viewModel.login(email: email, password: password)
+        }
+    }
+    
+    @objc private func authSwitchButtonTapped() {
+        if authView.mode == .login {
+            authView.mode = .signup
+            viewModel.updateMode(.signup)
+        } else {
+            authView.mode = .login
+            viewModel.updateMode(.login)
         }
     }
     
@@ -119,6 +129,8 @@ final class AuthViewController: UIViewController {
         default:
             break
         }
+        
+        viewModel.updateFormValidation()
     }
     
     private func showSignupCompleteAlert() {
