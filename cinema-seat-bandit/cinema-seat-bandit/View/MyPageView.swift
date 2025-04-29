@@ -44,6 +44,30 @@ final class MyPageView: UIView {
         sv.spacing = 16
         return sv
     }()
+    
+    private let tableViewTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "예매 내역"
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        return label
+    }()
+    
+    let tableView = MyPageTableView()
+    
+    private let tableContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.1
+        view.layer.shadowOffset = CGSize(width: 0, height: 4)
+        view.layer.shadowRadius = 10
+        view.layer.masksToBounds = false
+
+        view.layer.cornerRadius = 24
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        return view
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,8 +92,12 @@ final class MyPageView: UIView {
             userInfoStackView
         ].forEach { profileStackView.addArrangedSubview($0) }
         
+        tableContainerView.addSubview(tableView)
+        
         [
-            profileStackView
+            profileStackView,
+            tableViewTitleLabel,
+            tableContainerView
         ].forEach { addSubview($0) }
     }
     
@@ -80,7 +108,23 @@ final class MyPageView: UIView {
         
         profileStackView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(20)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(112)
+        }
+        
+        tableViewTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(profileStackView.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().inset(24)
+        }
+        
+        tableView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        tableContainerView.snp.makeConstraints {
+            $0.top.equalTo(tableViewTitleLabel.snp.bottom).offset(12)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
