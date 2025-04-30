@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -15,8 +16,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         let tabBarController = TabBarController()
-        
-        window.rootViewController = tabBarController
+        //범위 확인 임시 코드
+        tabBarController.tabBar.backgroundColor = .blue
+        if let user = Auth.auth().currentUser {
+            window.rootViewController = tabBarController
+        } else {
+            window.rootViewController = AuthViewController()
+        }
         window.makeKeyAndVisible()
         self.window = window
     }
