@@ -17,7 +17,7 @@ class TabBarController: UITabBarController {
     private func setupTabBar() {
         let movieListVC = MovieListViewController()
         let myPageVC = MyPageViewController()
-        let searchVC = SearchViewController()
+        let searchVC = MovieSearchViewController()
 
         let movieListNav = UINavigationController(rootViewController: movieListVC)
         let myPageNav = UINavigationController(rootViewController: myPageVC)
@@ -29,19 +29,19 @@ class TabBarController: UITabBarController {
             selectedImage: "📺".emojiToImage()?.withRenderingMode(.alwaysOriginal)
         )
 
-        myPageNav.tabBarItem = UITabBarItem(
-            title: "마이페이지",
-            image: "🏠".emojiToImage()?.withRenderingMode(.alwaysOriginal),
-            selectedImage: "🏠".emojiToImage()?.withRenderingMode(.alwaysOriginal)
-        )
-
         searchNav.tabBarItem = UITabBarItem(
             title: "영화검색",
             image: "🔍".emojiToImage()?.withRenderingMode(.alwaysOriginal),
             selectedImage: "🔍".emojiToImage()?.withRenderingMode(.alwaysOriginal)
         )
 
-        let iconItems = [movieListNav, myPageNav, searchNav]
+        myPageNav.tabBarItem = UITabBarItem(
+            title: "마이페이지",
+            image: "🏠".emojiToImage()?.withRenderingMode(.alwaysOriginal),
+            selectedImage: "🏠".emojiToImage()?.withRenderingMode(.alwaysOriginal)
+        )
+
+        let iconItems = [movieListNav, searchNav, myPageNav]
 
         iconItems.forEach{
             $0.tabBarItem.imageInsets = UIEdgeInsets(top: -4, left: 0, bottom: 4, right: 0)
@@ -49,7 +49,6 @@ class TabBarController: UITabBarController {
         }
         viewControllers = iconItems
 
-//        tabBar.tintColor = .systemBlue
         tabBar.unselectedItemTintColor = .gray
         tabBar.backgroundColor = .white
     }
