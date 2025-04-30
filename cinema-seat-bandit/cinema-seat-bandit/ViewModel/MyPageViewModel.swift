@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseAuth
 
-class MyPageViewModel: ViewModelProtocol {
+final class MyPageViewModel: ViewModelProtocol {
     struct Input {
         let didLoadView: Observable<Void>
         let didTapLogout: Observable<Void?>

@@ -16,8 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         let tabBarController = TabBarController()
-        //범위 확인 임시 코드
-        tabBarController.tabBar.backgroundColor = .blue
         if let user = Auth.auth().currentUser {
             window.rootViewController = tabBarController
         } else {
