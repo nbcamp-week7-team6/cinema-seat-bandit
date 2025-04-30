@@ -6,6 +6,13 @@ struct TrendingResponse: Decodable {
     let total_results: Int
 }
 
+struct UpcommingResponse: Decodable {
+    let page: Int
+    let results: [Movie]
+    let total_pages: Int
+    let total_results: Int
+}
+
 // MARK: - 영화 기본 정보 (트렌딩/검색 공통)
 struct Movie: Decodable {
     let id: Int
@@ -14,7 +21,8 @@ struct Movie: Decodable {
     let original_title: String    // 원제
     let overview: String          // 줄거리 (빈 문자열 가능)
     let poster_path: String?      // 포스터 경로 (Optional)
-    let media_type: String        // 미디어 타입 (movie/tv)
+    //upcomming을 받아오기위한 타입 수정
+    let media_type: String?        // 미디어 타입 (movie/tv)
     let adult: Bool               // 성인 콘텐츠 여부
     let original_language: String // 원본 언어 (ISO 639-1)
     let genre_ids: [Int]          // 장르 ID 배열

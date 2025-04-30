@@ -3,14 +3,10 @@ import SnapKit
 
 final class MovieListViewController: UIViewController {
 
-    // MARK: - UI Components
-
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.alwaysBounceVertical = true
-
-        scrollView.backgroundColor = .green
         return scrollView
     }()
 
@@ -20,31 +16,61 @@ final class MovieListViewController: UIViewController {
         stackView.spacing = 32
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
-        stackView.backgroundColor = .yellow
         return stackView
     }()
 
     private let popularSection = MovieSectionView(title: "Popular")
     private let upcomingSection = MovieSectionView(title: "Upcoming")
 
-    // MARK: - LifeCycle
-
     override func viewDidLoad() {
+        print("MovieListViewController 실행 확인")
         super.viewDidLoad()
         view.backgroundColor = .white
         setupViews()
         setupConstraints()
+        loadTrendingData()
+        loadUpcommingData()
+        setupClickEvents()
+
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        popularSection.scrollToMiddle()
-        upcomingSection.scrollToMiddle()
+    private func loadTrendingData() {
+        NetworkManager.shared.request(api: .trending()) {
+            (result: Result<TrendingResponse, Error>) in
+            switch result {
+            case .success(let response):
+                self.popularSection.setMovies(response.results)
+            case .failure(let error):
+                print("에러 발생: \(error)")
+            }
+        }
     }
 
-    
+    private func loadUpcommingData() {
+        NetworkManager.shared.request(api: .upcoming()) {
+            (result: Result<UpcommingResponse, Error>) in
+            switch result {
+            case .success(let response):
+                self.upcomingSection.setMovies(response.results)
+            case .failure(let error):
+                print("에러 발생: \(error)")
+            }
+        }
+    }
 
+    private func setupClickEvents() {
+        popularSection.onMovieTapped = { [weak self] movie in
+            let detailVC = MovieDetailViewController()
+            detailVC.movie = movie
+            self?.navigationController?.pushViewController(detailVC, animated: true)
+        }
+
+        upcomingSection.onMovieTapped = { [weak self] movie in
+            let detailVC = MovieDetailViewController()
+            detailVC.movie = movie
+            self?.navigationController?.pushViewController(detailVC, animated: true)
+        }
+    }
     private func setupViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
