@@ -9,6 +9,11 @@ import UIKit
 
 class ReservationViewController: UIViewController {
 
+    private let firstProcess = FirstReserveView()
+    private let secondProcess = SecondReserveView()
+    private let thirdProcess = ThirdReserveView()
+    private let finalProcess = FinalReserveView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
