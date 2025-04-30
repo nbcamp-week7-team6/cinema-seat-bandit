@@ -49,7 +49,7 @@ class TabBarController: UITabBarController {
         }
         viewControllers = iconItems
 
-        tabBar.tintColor = .systemBlue
+//        tabBar.tintColor = .systemBlue
         tabBar.unselectedItemTintColor = .gray
         tabBar.backgroundColor = .white
     }

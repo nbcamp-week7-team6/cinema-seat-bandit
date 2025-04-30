@@ -10,25 +10,14 @@ import SnapKit
 
 final class MovieSectionView: UIView {
 
-
-    private let realMovies: [MovieModel] = [
-        MovieModel(rank: 1, title: "Movie1", rating: 4.5),
-        MovieModel(rank: 2, title: "Movie2", rating: 4.3),
-        MovieModel(rank: 3, title: "Movie3", rating: 4.8),
-        MovieModel(rank: 4, title: "Movie4", rating: 4.6),
-        MovieModel(rank: 5, title: "Movie5", rating: 4.2)
-    ]
-
-    // 데이터를 반복해서 크게 만든다 (100배 정도)
-    lazy var movies: [MovieModel] = Array(repeating: realMovies, count: 100).flatMap { $0 }
+    var movies: [Movie] = []
+    var onMovieTapped: ((Movie) -> Void)?
 
 
     func scrollToMiddle() {
         let middleIndexPath = IndexPath(item: movies.count / 2, section: 0)
         collectionView.scrollToItem(at: middleIndexPath, at: .centeredHorizontally, animated: false)
     }
-
-
 
     private let titleLabel = UILabel()
     private lazy var collectionView: UICollectionView = {
@@ -38,7 +27,6 @@ final class MovieSectionView: UIView {
         )
 
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .red
         collectionView.register(MovieCell.self, forCellWithReuseIdentifier: MovieCell.identifier)
         collectionView.dataSource = self
         return collectionView
@@ -50,8 +38,6 @@ final class MovieSectionView: UIView {
         titleLabel.font = .boldSystemFont(ofSize: 20)
         setupViews()
         setupConstraints()
-
-        //
         collectionView.delegate = self
         collectionView.dataSource = self
 
@@ -66,6 +52,19 @@ final class MovieSectionView: UIView {
         addSubview(collectionView)
     }
 
+    func setMovies(_ movies: [Movie]) {
+        print("영화 데이터 개수ㅗㅗㅗㅗㅗ: \(movies.count)")
+        self.movies = Array(repeating: movies, count: 3).flatMap { $0 }
+        collectionView.reloadData()
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.layoutIfNeeded() //화면이 전활 될 때도 호출이됨
+            self.scrollToMiddle()
+        }
+    }
+
+
     private func setupConstraints() {
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
@@ -75,7 +74,7 @@ final class MovieSectionView: UIView {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
             $0.left.right.equalToSuperview()
-            $0.height.equalTo(260)
+            $0.height.equalTo(280)
             $0.bottom.equalToSuperview()
         }
     }
@@ -90,20 +89,22 @@ final class MovieSectionView: UIView {
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(140),
             heightDimension: .absolute(240)
+            //주의 *heightDimension이 컬렉션뷰의 height와 동등하거나 이상이면 위아애로 움직이는 이슈가 있음
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.interGroupSpacing = 12
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+
+        section.interGroupSpacing = 8
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 16, bottom: 0, trailing: 16)
 
         section.visibleItemsInvalidationHandler = { (visibleItems, offset, environment) in
                let centerX = offset.x + environment.container.contentSize.width / 2
                for item in visibleItems {
                    let distanceFromCenter = abs(item.frame.midX - centerX)
                    let minScale: CGFloat = 0.8
-                   let maxScale: CGFloat = 1.0
+                   let maxScale: CGFloat = 1.15
                    let totalDistance = environment.container.contentSize.width / 2
                    let distanceRatio = min(distanceFromCenter / totalDistance, 1)
                    let scale = maxScale - (maxScale - minScale) * distanceRatio
@@ -122,15 +123,23 @@ final class MovieSectionView: UIView {
 
 extension MovieSectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        movies.count
+        return movies.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else {
             return UICollectionViewCell()
         }
+        cell.configure(with: movies[indexPath.item])
         return cell
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedMovie = movies[indexPath.item]
+        onMovieTapped?(selectedMovie)
+    }
+
+
 }
 
 extension MovieSectionView: UICollectionViewDelegate {
@@ -143,7 +152,7 @@ extension MovieSectionView: UICollectionViewDelegate {
         guard let currentIndex = visibleItems.sorted().first?.item else { return }
 
         let itemCount = movies.count
-        let realItemCount = realMovies.count
+        let realItemCount = movies.count
 
         if currentIndex <= realItemCount {
             // 너무 앞으로 왔다
