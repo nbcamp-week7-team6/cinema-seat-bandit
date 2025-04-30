@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		28D5FA942DBFB6A800AFA774 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 28D5FA932DBFB6A800AFA774 /* FirebaseAuth */; };
-		28D5FA962DBFB6A800AFA774 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 28D5FA952DBFB6A800AFA774 /* FirebaseFirestore */; };
 		F489AB752DBB79E7009B2401 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F489AB742DBB79E7009B2401 /* SnapKit */; };
 		F489ABA92DBB7CD2009B2401 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F489ABA82DBB7CD2009B2401 /* Kingfisher */; };
 		F489ABAC2DBB7D61009B2401 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F489ABAB2DBB7D61009B2401 /* Alamofire */; };
@@ -47,8 +45,6 @@
 				F489ABAC2DBB7D61009B2401 /* Alamofire in Frameworks */,
 				F489ABA92DBB7CD2009B2401 /* Kingfisher in Frameworks */,
 				F489AB752DBB79E7009B2401 /* SnapKit in Frameworks */,
-				28D5FA962DBFB6A800AFA774 /* FirebaseFirestore in Frameworks */,
-				28D5FA942DBFB6A800AFA774 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,8 +90,6 @@
 				F489AB742DBB79E7009B2401 /* SnapKit */,
 				F489ABA82DBB7CD2009B2401 /* Kingfisher */,
 				F489ABAB2DBB7D61009B2401 /* Alamofire */,
-				28D5FA932DBFB6A800AFA774 /* FirebaseAuth */,
-				28D5FA952DBFB6A800AFA774 /* FirebaseFirestore */,
 			);
 			productName = "cinema-seat-bandit";
 			productReference = F489AB372DBB7939009B2401 /* cinema-seat-bandit.app */;
@@ -129,7 +123,6 @@
 				F489AB732DBB79E7009B2401 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F489ABA72DBB7CD2009B2401 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				F489ABAA2DBB7D61009B2401 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				28D5FA922DBFB6A800AFA774 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F489AB382DBB7939009B2401 /* Products */;
@@ -369,14 +362,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		28D5FA922DBFB6A800AFA774 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.12.0;
-			};
-		};
 		F489AB732DBB79E7009B2401 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -404,16 +389,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		28D5FA932DBFB6A800AFA774 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 28D5FA922DBFB6A800AFA774 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
-		28D5FA952DBFB6A800AFA774 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 28D5FA922DBFB6A800AFA774 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
-		};
 		F489AB742DBB79E7009B2401 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F489AB732DBB79E7009B2401 /* XCRemoteSwiftPackageReference "SnapKit" */;

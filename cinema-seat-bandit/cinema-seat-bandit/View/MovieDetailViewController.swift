@@ -1,39 +1,31 @@
-//
-//  Untitled.swift
-//  cinema-seat-bandit
-//
-//  Created by 윤주형 on 4/29/25.
-//
-
 import UIKit
 import SnapKit
 import Kingfisher
 
 class MovieDetailViewController: UIViewController {
 
-    // TODO: - 영화 목록 페이지 연결 및 데이터 필요
-    // TODO: - Button Action
-
     private var isFavorite = false
+    private let viewModel = MovieDetailViewModel()
     var movie: Movie?
-
+    
+    private let reservateButtonTapTrigger = Observable<Void>(())
+    
     private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.showsVerticalScrollIndicator = true
         scroll.alwaysBounceVertical = true
-        scroll.backgroundColor = .cyan
         return scroll
     }()
-
+    
     private let contentView = UIView()
-
+    
     private let moviePoster: UIImageView = {
         let img = UIImageView()
         img.contentMode = .scaleAspectFit
         img.image = UIImage(systemName: "xmark") // Test
         return img
     }()
-
+    
     private let plotLabel: UILabel = {
         let plot = UILabel()
         plot.font = .systemFont(ofSize: 16, weight: .medium)
@@ -41,8 +33,8 @@ class MovieDetailViewController: UIViewController {
         plot.textAlignment = .center
         return plot
     }()
-
-    private let reservateButton: UIButton = {
+    
+    private lazy var reservateButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = UIColor(red: 32/255, green: 112/255, blue: 248/255, alpha: 1)
         config.baseForegroundColor = .white
@@ -52,34 +44,50 @@ class MovieDetailViewController: UIViewController {
         config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
         config.imagePadding = 12
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 24, bottom: 8, trailing: 24)
-
+        
         let button = UIButton(configuration: config)
+        button.addTarget(self, action: #selector(reservateButtonClicked), for: .touchUpInside)
         return button
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        bindMovie()
-    }
-
-    //MARK: 주형 추가 - 데이터 바인딩
-    private func bindMovie() {
-        guard let movie = movie else { return }
-
-        title = movie.title
-        plotLabel.text = movie.overview.isEmpty ? "줄거리 정보가 없습니다." : movie.overview
-
-        if let posterPath = movie.poster_path {
-            let imageURL = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
-            moviePoster.kf.setImage(with: imageURL)
-        } else {
-            moviePoster.image = UIImage(named: "이미지 못 가져옴")
+        bindViewModel()
+        if let movie = movie {
+            viewModel.setMovieData(movie: movie)
         }
     }
-
-
+    
+    private func bindViewModel() {
+        let input = MovieDetailViewModel.Input(
+            reservateButtonClick: reservateButtonTapTrigger
+        )
+        let output = viewModel.transform(input: input)
+        
+        output.movieTitle.bind { [weak self] title in
+            self?.title = title
+        }
+        output.plot.bind { [weak self] plot in
+            self?.plotLabel.text = plot
+        }
+        output.moviePoster.bind { [weak self] urlString in
+            guard let urlString = urlString, let url = URL(string: urlString) else {
+                self?.moviePoster.image = UIImage(systemName: "xmark")
+                return
+            }
+            self?.moviePoster.kf.setImage(with: url)
+        }
+    }
+    
+    @objc
+    private func reservateButtonClicked() {
+        reservateButtonTapTrigger.value = ()
+        navigationController?.pushViewController(ReservationViewController(), animated: true)
+    }
+    
+    
 }
 
 extension MovieDetailViewController {
@@ -88,7 +96,7 @@ extension MovieDetailViewController {
         [scrollView, reservateButton].forEach { view.addSubview($0) }
         scrollView.addSubview(contentView)
         [moviePoster, plotLabel].forEach { contentView.addSubview($0) }
-
+        
         setupFavoriteButton()
     }
     private func setupConstraints() {
@@ -116,7 +124,7 @@ extension MovieDetailViewController {
             make.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
     }
-
+    
 }
 
 // MARK: - 즐겨찾기 버튼
@@ -124,11 +132,11 @@ extension MovieDetailViewController {
     private func setupFavoriteButton() {
         let starButton = UIButton(type: .system)
         updateFavoriteButton(button: starButton)
-
+        
         starButton.snp.makeConstraints { make in
             make.size.equalTo(32)
         }
-
+        
         let barButton = UIBarButtonItem(customView: starButton)
         navigationItem.rightBarButtonItem = barButton
     }
