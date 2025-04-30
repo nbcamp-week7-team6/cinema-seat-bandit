@@ -38,12 +38,21 @@ final class MyPageViewController: UIViewController {
     
     private let mypageView = MyPageView()
     
+    private let viewModel = MyPageViewModel()
+    
+    private let didLoadView = Observable<Void>(())
+    private let didTapLogout = Observable<Void?>(nil)
+    
     override func viewDidLoad() {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         setupViews()
         setupConstraints()
         setupTableView()
+        bindViewModel()
+        setupActions()
+        
+        didLoadView.value = ()
     }
     
     private func setupViews() {
@@ -73,6 +82,46 @@ final class MyPageViewController: UIViewController {
         mypageView.tableView.showsVerticalScrollIndicator = false
         mypageView.tableView.dataSource = self
         mypageView.tableView.rowHeight = UITableView.automaticDimension
+    }
+    
+    private func setupActions() {
+        mypageView.logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func logoutButtonTapped() {
+        didTapLogout.value = ()
+    }
+    
+    private func bindViewModel() {
+        let input = MyPageViewModel.Input(
+            didLoadView: didLoadView,
+            didTapLogout: didTapLogout
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.userEmail.bind { [weak self] email in
+            self?.mypageView.userNameLabel.text = "안녕하세요, \(email)"
+        }
+        
+        output.logoutSuccess.bind { [weak self] isLoggedOut in
+            if isLoggedOut {
+                self?.moveToLoginScreen()
+            }
+        }
+    }
+    
+    private func moveToLoginScreen() {
+        let loginVC = AuthViewController()
+        let nav = UINavigationController(rootViewController: loginVC)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let sceneDelegate = windowScene.delegate as? UIWindowSceneDelegate,
+           let window = (sceneDelegate as? NSObject)?.value(forKey: "window") as? UIWindow {
+            
+            window.rootViewController = nav
+            window.makeKeyAndVisible()
+        }
     }
 }
 

@@ -18,13 +18,13 @@ final class MyPageView: UIView {
         return iv
     }()
     
-    private let userNameLabel: UILabel = {
+    let userNameLabel: UILabel = {
         let label = UILabel()
         label.text = "안녕하세요. asdf@asdf.com"
         return label
     }()
     
-    private let logoutButton: UIButton = {
+    let logoutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("로그아웃", for: .normal)
         return button
@@ -118,7 +118,8 @@ final class MyPageView: UIView {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
+            $0.top.equalToSuperview().offset(8)
+            $0.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(16)
         }
         
