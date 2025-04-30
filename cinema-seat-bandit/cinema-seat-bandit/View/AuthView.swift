@@ -36,7 +36,7 @@ final class AuthView: UIView {
         return label
     }()
     
-    private let emailTextField: UITextField = {
+    let emailTextField: UITextField = {
         let textField = PaddedTextField()
         textField.placeholder = "이메일을 입력하세요."
         textField.borderStyle = .roundedRect
@@ -49,7 +49,7 @@ final class AuthView: UIView {
         return label
     }()
     
-    private let passwordTextField: UITextField = {
+    let passwordTextField: UITextField = {
         let textField = PaddedTextField()
         textField.placeholder = "비밀번호를 입력하세요."
         textField.borderStyle = .roundedRect
@@ -62,7 +62,7 @@ final class AuthView: UIView {
         return label
     }()
     
-    private let confirmPasswordTextField: UITextField = {
+    let confirmPasswordTextField: UITextField = {
         let textField = PaddedTextField()
         textField.placeholder = "비밀번호를 다시 입력하세요."
         textField.borderStyle = .roundedRect
@@ -76,7 +76,7 @@ final class AuthView: UIView {
         return sv
     }()
     
-    private let authActionButton: UIButton = {
+    let authActionButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("로그인", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -92,7 +92,7 @@ final class AuthView: UIView {
         return label
     }()
     
-    private let authSwitchButton: UIButton = {
+    let authSwitchButton: UIButton = {
         let button = UIButton()
         button.setTitle("회원가입", for: .normal)
         button.setTitleColor(.link, for: .normal)
@@ -154,8 +154,6 @@ final class AuthView: UIView {
             authActionButton,
             authSwitchStackView
         ].forEach { addSubview($0) }
-        
-        authSwitchButton.addTarget(self, action: #selector(authSwitchButtonTapped), for: .touchUpInside)
     }
     
     private func setupConstraints() {
@@ -193,9 +191,5 @@ final class AuthView: UIView {
             $0.bottom.equalToSuperview().inset(32)
             $0.centerX.equalToSuperview()
         }
-    }
-    
-    @objc private func authSwitchButtonTapped() {
-        mode == .login ? (mode = .signup) : (mode = .login)
     }
 }
