@@ -5,6 +5,10 @@ class SecondReserveView: UIView {
     
     private let viewModel = ReservateViewModel(mockShowtimes: mockShowtimes)
     
+    var onReserveCompleted: ((String, String) -> Void)?
+    var onNextButtonTapped: (() -> Void)?
+    var onPreviousButtonTapped: (() -> Void)?
+    
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -27,16 +31,9 @@ class SecondReserveView: UIView {
         return img
     }()
     
-    private let thirdProcessImage: UIImageView = {
-        let img = UIImageView()
-        img.image = UIImage(systemName: "3.circle.fill")
-        img.tintColor = UIColor.lightGray
-        return img
-    }()
-    
     private let finalProcessImage: UIImageView = {
         let img = UIImageView()
-        img.image = UIImage(systemName: "4.circle.fill")
+        img.image = UIImage(systemName: "3.circle.fill")
         img.tintColor = UIColor.lightGray
         return img
     }()
@@ -78,6 +75,7 @@ class SecondReserveView: UIView {
         button.layer.cornerRadius = 8
         button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(previousButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -95,6 +93,7 @@ class SecondReserveView: UIView {
         button.layer.cornerRadius = 8
         button.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -103,6 +102,25 @@ class SecondReserveView: UIView {
         setupViews()
         setupConstraints()
         setupCollectionView()
+    }
+    
+    @objc private func previousButtonTapped() {
+        onPreviousButtonTapped?()
+    }
+    
+    @objc private func nextButtonTapped() {
+        let dateIndex = viewModel.selectedDateIndex.value
+        let dates = viewModel.dates.value
+        guard dateIndex >= 0, dateIndex < dates.count else { return }
+        let date = dates[dateIndex]
+        
+        guard let showtimeId = viewModel.selectedShowtimeId.value,
+              let showtimeIndex = viewModel.showtimes.value.firstIndex(where: { $0.id == showtimeId }),
+              let time = viewModel.getShowtimeInfo(at: showtimeIndex)?.time
+        else { return }
+        
+        // 콜백으로 넘기기
+        onReserveCompleted?(date, time)
     }
     
     @available(*, unavailable)
@@ -114,14 +132,14 @@ class SecondReserveView: UIView {
 extension SecondReserveView {
     private func setupViews() {
         [stackView, titleLabel, collectionView, buttonStackView].forEach { addSubview($0) }
-        [firstProcessImage, secondProcessImage, thirdProcessImage, finalProcessImage].forEach {
+        [firstProcessImage, secondProcessImage, finalProcessImage].forEach {
             stackView.addArrangedSubview($0)
         }
         [previousButton, nextButton].forEach { buttonStackView.addArrangedSubview($0) }
     }
     
     private func setupConstraints() {
-        [firstProcessImage, secondProcessImage, thirdProcessImage, finalProcessImage].forEach {
+        [firstProcessImage, secondProcessImage, finalProcessImage].forEach {
             $0.snp.makeConstraints { make in
                 make.size.equalTo(32)
             }

@@ -3,6 +3,9 @@ import SnapKit
 
 class FirstReserveView: UIView {
     
+    var onNextButtonTapped: (() -> Void)?
+    var onCancelButtonTapped: (() -> Void)?
+    
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -25,25 +28,25 @@ class FirstReserveView: UIView {
         return img
     }()
     
-    private let thirdProcessImage: UIImageView = {
+    private let finalProcessImage: UIImageView = {
         let img = UIImageView()
         img.image = UIImage(systemName: "3.circle.fill")
         img.tintColor = UIColor.lightGray
         return img
     }()
     
-    private let finalProcessImage: UIImageView = {
+    let moviePosterImage: UIImageView = {
         let img = UIImageView()
-        img.image = UIImage(systemName: "4.circle.fill")
-        img.tintColor = UIColor.lightGray
+        img.contentMode = .scaleAspectFit
+        img.image = UIImage(systemName: "film")
         return img
     }()
     
-    private let moviePosterImage: UIImageView = {
-        let img = UIImageView()
-        img.contentMode = .scaleAspectFit
-        img.image = UIImage(systemName: "xmark") // Test
-        return img
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "영화 정보 확인"
+        label.font = .boldSystemFont(ofSize: 24)
+        return label
     }()
     
     private lazy var buttonStackView: UIStackView = {
@@ -53,7 +56,7 @@ class FirstReserveView: UIView {
         stack.distribution = .fillEqually
         return stack
     }()
-
+    
     private lazy var cancelButton: UIButton = {
         var configuration = UIButton.Configuration.plain()
         configuration.baseBackgroundColor = .white
@@ -68,9 +71,10 @@ class FirstReserveView: UIView {
         button.layer.cornerRadius = 8
         button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
-
+    
     private lazy var nextButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = .systemBlue
@@ -85,9 +89,17 @@ class FirstReserveView: UIView {
         button.layer.cornerRadius = 8
         button.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
-
+    
+    @objc private func nextButtonTapped() {
+        onNextButtonTapped?()
+    }
+    
+    @objc private func cancelButtonTapped() {
+        onCancelButtonTapped?()
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -103,15 +115,15 @@ class FirstReserveView: UIView {
 
 extension FirstReserveView {
     private func setupViews() {
-        [stackView, moviePosterImage, buttonStackView].forEach { addSubview($0) }
-        [firstProcessImage, secondProcessImage, thirdProcessImage, finalProcessImage].forEach {
+        [stackView, titleLabel, moviePosterImage, buttonStackView].forEach { addSubview($0) }
+        [firstProcessImage, secondProcessImage, finalProcessImage].forEach {
             stackView.addArrangedSubview($0)
         }
         [cancelButton, nextButton].forEach { buttonStackView.addArrangedSubview($0) }
     }
     
     private func setupConstraints() {
-        [firstProcessImage, secondProcessImage, thirdProcessImage, finalProcessImage].forEach {
+        [firstProcessImage, secondProcessImage, finalProcessImage].forEach {
             $0.snp.makeConstraints { make in
                 make.size.equalTo(32)
             }
@@ -121,16 +133,23 @@ extension FirstReserveView {
             make.directionalHorizontalEdges.equalToSuperview().inset(36)
             make.height.equalTo(32)
         }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(stackView.snp.bottom).offset(24)
+            make.leading.equalToSuperview().offset(24)
+        }
+        
         moviePosterImage.snp.makeConstraints { make in
-            make.top.equalTo(stackView.snp.bottom).offset(12)
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
             make.directionalHorizontalEdges.equalToSuperview().inset(24)
             make.height.equalTo(300)
         }
+        
         buttonStackView.snp.makeConstraints { make in
             make.top.equalTo(moviePosterImage.snp.bottom).offset(24)
             make.directionalHorizontalEdges.equalToSuperview().inset(36)
             make.height.equalTo(54)
-            make.bottom.lessThanOrEqualToSuperview().inset(24) // 안전한 하단 여백 추가
+            make.bottom.lessThanOrEqualToSuperview().inset(24)
         }
     }
 }

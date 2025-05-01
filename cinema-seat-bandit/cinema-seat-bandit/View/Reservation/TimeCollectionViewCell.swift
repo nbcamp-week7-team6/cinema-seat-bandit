@@ -28,7 +28,6 @@ class TimeCollectionViewCell: UICollectionViewCell {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = 6
-        //stack.alignment = .leading
         return stack
     }()
     

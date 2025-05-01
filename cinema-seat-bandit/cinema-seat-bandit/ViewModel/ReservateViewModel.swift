@@ -80,4 +80,17 @@ final class ReservateViewModel {
         
         return (showtime.time, theater, remaining)
     }
+    
+    // 선택된 날짜 계산
+    private var selectedDate: String? {
+        guard selectedDateIndex.value < dates.value.count else { return nil }
+        return dates.value[selectedDateIndex.value]
+    }
+    
+    // 선택된 상영시간 계산
+    private var selectedShowtime: (time: String, theater: String, remaining: String)? {
+        guard let id = selectedShowtimeId.value,
+              let showtime = showtimes.value.first(where: { $0.id == id }) else { return nil }
+        return getShowtimeInfo(at: showtimes.value.firstIndex(where: { $0.id == id }) ?? 0)
+    }
 }
