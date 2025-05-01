@@ -60,6 +60,11 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
     private func bindViewModel() {
         let input = MovieDetailViewModel.Input(
             reservateButtonClick: reservateButtonTapTrigger
