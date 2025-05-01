@@ -125,13 +125,6 @@ final class AuthView: UIView {
         return label
     }()
     
-//    private let confirmPasswordStackView: UIStackView = {
-//        let sv = UIStackView()
-//        sv.axis = .vertical
-//        sv.spacing = 8
-//        return sv
-//    }()
-    
     let authActionButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("로그인", for: .normal)
@@ -211,12 +204,6 @@ final class AuthView: UIView {
     }
     
     private func setupViews() {
-//        [
-//            confirmPasswordLabel,
-//            confirmPasswordTextField,
-//            confirmPasswordValidationLabel
-//        ].forEach { confirmPasswordStackView.addArrangedSubview($0) }
-        
         [
             authSwitchLabel,
             authSwitchButton
@@ -229,7 +216,6 @@ final class AuthView: UIView {
             passwordLabel,
             passwordTextField,
             passwordValidationLabel,
-//            confirmPasswordStackView,
             confirmPasswordLabel,
             confirmPasswordTextField,
             confirmPasswordValidationLabel,
@@ -285,11 +271,6 @@ final class AuthView: UIView {
             $0.leading.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview()
         }
-        
-//        confirmPasswordStackView.snp.makeConstraints {
-//            $0.top.equalTo(passwordTextField.snp.bottom).offset(24)
-//            $0.leading.trailing.equalToSuperview()
-//        }
         
         if let bottomAnchor = passwordFieldBottomAnchor {
             authActionButton.snp.makeConstraints {
