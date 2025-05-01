@@ -45,7 +45,10 @@ final class AuthView: UIView {
         let tf = PaddedTextField()
         tf.keyboardType = .emailAddress
         tf.placeholder = "이메일을 입력하세요."
-        tf.borderStyle = .roundedRect
+        tf.borderStyle = .none
+        tf.layer.borderWidth = 1
+        tf.layer.borderColor = UIColor.systemGray5.cgColor
+        tf.layer.cornerRadius = 8
         return tf
     }()
     
@@ -58,7 +61,10 @@ final class AuthView: UIView {
     let passwordTextField: UITextField = {
         let tf = PaddedTextField()
         tf.placeholder = "비밀번호를 입력하세요."
-        tf.borderStyle = .roundedRect
+        tf.borderStyle = .none
+        tf.layer.borderWidth = 1
+        tf.layer.borderColor = UIColor.systemGray5.cgColor
+        tf.layer.cornerRadius = 8
         return tf
     }()
     
@@ -76,10 +82,13 @@ final class AuthView: UIView {
     }()
     
     let confirmPasswordTextField: UITextField = {
-        let textField = PaddedTextField()
-        textField.placeholder = "비밀번호를 다시 입력하세요."
-        textField.borderStyle = .roundedRect
-        return textField
+        let tf = PaddedTextField()
+        tf.placeholder = "비밀번호를 다시 입력하세요."
+        tf.borderStyle = .none
+        tf.layer.borderWidth = 1
+        tf.layer.borderColor = UIColor.systemGray5.cgColor
+        tf.layer.cornerRadius = 8
+        return tf
     }()
     
     private let confirmPasswordToggleButton: UIButton = {
@@ -140,6 +149,7 @@ final class AuthView: UIView {
         setupConstraints()
         updateViewForMode()
         setupPasswordSecure()
+        setupDelegates()
     }
     
     @available(*, unavailable)
@@ -237,5 +247,28 @@ final class AuthView: UIView {
         confirmPasswordTextField.isSecureTextEntry.toggle()
         let imageName = confirmPasswordTextField.isSecureTextEntry ? "eye.fill" : "eye.slash.fill"
         confirmPasswordToggleButton.setImage(UIImage(systemName: imageName), for: .normal)
+    }
+    
+    private func setupDelegates() {
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        confirmPasswordTextField.delegate = self
+    }
+}
+
+extension AuthView: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        updateTextFieldBorders(selected: textField)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        updateTextFieldBorders(selected: textField)
+    }
+    
+    private func updateTextFieldBorders(selected: UITextField) {
+        let fields = [emailTextField, passwordTextField, confirmPasswordTextField]
+        for field in fields {
+            field.layer.borderColor = (field == selected) ? UIColor.systemGray2.cgColor : UIColor.systemGray5.cgColor
+        }
     }
 }
