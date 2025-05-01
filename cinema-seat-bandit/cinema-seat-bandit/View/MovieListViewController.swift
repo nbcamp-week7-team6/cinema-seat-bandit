@@ -83,7 +83,8 @@ final class MovieListViewController: UIViewController {
 
     func scrollToMiddle(collectionView: UICollectionView?) {
         guard let collectionView = collectionView else { return }
-        let middleIndexPath = IndexPath(item: popularMovies.count / 2, section: 0)
+        let itemCount = collectionView.numberOfItems(inSection: 0)
+        let middleIndexPath = IndexPath(item: itemCount / 2, section: 0)
         collectionView.scrollToItem(at: middleIndexPath, at: .centeredHorizontally, animated: false)
     }
 }
