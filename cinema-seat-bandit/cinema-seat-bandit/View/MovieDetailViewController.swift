@@ -89,7 +89,14 @@ class MovieDetailViewController: UIViewController {
     @objc
     private func reservateButtonClicked() {
         reservateButtonTapTrigger.value = ()
-        navigationController?.pushViewController(ReservationViewController(), animated: true)
+        
+        let reservationVC = ReservationViewController()
+        navigationController?.pushViewController(reservationVC, animated: true)
+        
+        reservationVC.moviePoster = moviePoster.image
+        reservationVC.movieTitle = movie?.title
+        reservationVC.movieOverview = movie?.overview
+
     }
     
     

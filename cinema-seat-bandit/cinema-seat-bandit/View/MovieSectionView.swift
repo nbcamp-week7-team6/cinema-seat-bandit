@@ -20,6 +20,7 @@ final class MovieSectionView: UIView {
     }
 
     private let titleLabel = UILabel()
+
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(
             frame: .zero,
@@ -48,12 +49,11 @@ final class MovieSectionView: UIView {
     }
 
     private func setupViews() {
-        addSubview(titleLabel)
-        addSubview(collectionView)
+        [titleLabel, collectionView]
+            .forEach{ addSubview($0)}
     }
 
     func setMovies(_ movies: [Movie]) {
-        print("영화 데이터 개수ㅗㅗㅗㅗㅗ: \(movies.count)")
         self.movies = Array(repeating: movies, count: 3).flatMap { $0 }
         collectionView.reloadData()
 
@@ -74,7 +74,7 @@ final class MovieSectionView: UIView {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
             $0.left.right.equalToSuperview()
-            $0.height.equalTo(280)
+            $0.height.equalTo(260)
             $0.bottom.equalToSuperview()
         }
     }
@@ -88,7 +88,7 @@ final class MovieSectionView: UIView {
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(140),
-            heightDimension: .absolute(240)
+            heightDimension: .absolute(220)
             //주의 *heightDimension이 컬렉션뷰의 height와 동등하거나 이상이면 위아애로 움직이는 이슈가 있음
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
@@ -130,7 +130,7 @@ extension MovieSectionView: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else {
             return UICollectionViewCell()
         }
-        cell.configure(with: movies[indexPath.item])
+        cell.configure(with: movies[indexPath.item], showVoteAverage: true)
         return cell
     }
 

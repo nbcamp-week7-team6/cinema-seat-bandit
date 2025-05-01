@@ -50,9 +50,7 @@ class NetworkManager {
                 case .success(let data):
                     completion(.success(data))
                 case .failure(let error):
-                    print("네트워크 실패: \(error.localizedDescription)")
                     let statusCode = response.response?.statusCode ?? -1
-                    print("실패한 StatusCode: \(statusCode)")
                     let errorMessage = self.handleError(error: error, statusCode: statusCode)
                     completion(.failure(errorMessage))
                 }
