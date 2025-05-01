@@ -32,6 +32,15 @@ final class MyPageViewController: UIViewController {
     
     private var reservations: [ReservationModel] = []
     
+    private let emptyStateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "예매 내역이 없습니다."
+        label.textAlignment = .center
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        return label
+    }()
+    
     override func viewDidLoad() {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
@@ -100,6 +109,11 @@ final class MyPageViewController: UIViewController {
         }
         
         output.reservations.bind { [weak self] reservationList in
+            if reservationList.isEmpty {
+                self?.mypageView.tableView.backgroundView = self?.emptyStateLabel
+            } else {
+                self?.mypageView.tableView.backgroundView = nil
+            }
             self?.reservations = reservationList
             self?.mypageView.tableView.reloadData()
         }
