@@ -49,6 +49,7 @@ final class AuthView: UIView {
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.systemGray5.cgColor
         tf.layer.cornerRadius = 8
+        tf.returnKeyType = .next
         return tf
     }()
     
@@ -73,6 +74,7 @@ final class AuthView: UIView {
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.systemGray5.cgColor
         tf.layer.cornerRadius = 8
+        tf.returnKeyType = .next
         return tf
     }()
     
@@ -104,6 +106,7 @@ final class AuthView: UIView {
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.systemGray5.cgColor
         tf.layer.cornerRadius = 8
+        tf.returnKeyType = .done
         return tf
     }()
     
@@ -341,6 +344,24 @@ extension AuthView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateTextFieldBorders(selected: textField)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case emailTextField:
+            passwordTextField.becomeFirstResponder()
+        case passwordTextField:
+            if mode == .signup {
+                confirmPasswordTextField.becomeFirstResponder()
+            } else {
+                passwordTextField.resignFirstResponder()
+            }
+        case confirmPasswordTextField:
+            confirmPasswordTextField.resignFirstResponder()
+        default:
+            textField.resignFirstResponder()
+        }
+        return true
     }
     
     private func updateTextFieldBorders(selected: UITextField) {
