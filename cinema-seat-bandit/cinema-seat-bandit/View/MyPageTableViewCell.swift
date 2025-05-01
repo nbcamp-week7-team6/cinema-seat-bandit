@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class MyPageTableViewCell: UITableViewCell {
     static let identifier = "MyPageTableViewCell"
@@ -141,9 +142,22 @@ final class MyPageTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(with reservation: Reservation) {
-        reservationDateLabel.text = reservation.reservationDate
-        theaterNameLabel.text = reservation.theaterName
+    func configure(with reservation: ReservationModel) {
+        if let url = URL(string: "https://image.tmdb.org/t/p/w500\(reservation.posterImageURL)") {
+            posterImageView.kf.setImage(with: url)
+        }
+        
         movieTitleLabel.text = reservation.movieTitle
+        
+        let theaters = [
+            "CGV 용산아이파크몰", "메가박스 코엑스", "롯데시네마 월드타워", "CGV 홍대", "메가박스 강남",
+            "롯데시네마 건대입구", "CGV 왕십리", "메가박스 신촌", "롯데시네마 김포공항", "CGV 압구정"
+        ]
+        theaterNameLabel.text = theaters.randomElement()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M.d"
+        let dateText = formatter.string(from: reservation.screeningDate)
+        reservationDateLabel.text = "\(dateText) \(reservation.statusText)"
     }
 }

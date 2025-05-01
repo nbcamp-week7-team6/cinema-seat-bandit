@@ -16,11 +16,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         let tabBarController = TabBarController()
-        if let user = Auth.auth().currentUser {
+        if let _ = Auth.auth().currentUser {
             window.rootViewController = tabBarController
         } else {
             window.rootViewController = AuthViewController()
         }
+//        window.rootViewController = TestReservationViewController()
         window.makeKeyAndVisible()
         self.window = window
     }
