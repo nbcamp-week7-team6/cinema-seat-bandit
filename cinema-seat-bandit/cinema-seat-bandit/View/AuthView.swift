@@ -52,7 +52,7 @@ final class AuthView: UIView {
         return tf
     }()
     
-    private let emailValidationLabel: UILabel = {
+    let emailValidationLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .systemRed
@@ -83,7 +83,7 @@ final class AuthView: UIView {
         return button
     }()
     
-    private let passwordValidationLabel: UILabel = {
+    let passwordValidationLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .systemRed
@@ -114,7 +114,7 @@ final class AuthView: UIView {
         return button
     }()
     
-    private let confirmPasswordValidationLabel: UILabel = {
+    let confirmPasswordValidationLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .systemRed
@@ -122,12 +122,12 @@ final class AuthView: UIView {
         return label
     }()
     
-    private let confirmPasswordStackView: UIStackView = {
-        let sv = UIStackView()
-        sv.axis = .vertical
-        sv.spacing = 8
-        return sv
-    }()
+//    private let confirmPasswordStackView: UIStackView = {
+//        let sv = UIStackView()
+//        sv.axis = .vertical
+//        sv.spacing = 8
+//        return sv
+//    }()
     
     let authActionButton: UIButton = {
         let button = UIButton(type: .system)
@@ -166,6 +166,8 @@ final class AuthView: UIView {
         }
     }
     
+    var passwordFieldBottomAnchor: ConstraintItem?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -184,17 +186,33 @@ final class AuthView: UIView {
     private func updateViewForMode() {
         confirmPasswordLabel.isHidden = mode == .login
         confirmPasswordTextField.isHidden = mode == .login
-        authActionButton.setTitle(mode == .login ? "로그인" : "회원가입", for: .normal)        
+        if mode == .login {
+            confirmPasswordValidationLabel.isHidden = true
+        } else {
+            confirmPasswordValidationLabel.text = nil
+            confirmPasswordValidationLabel.isHidden = true
+        }
+        
+        let bottomAnchor = mode == .login ? passwordTextField.snp.bottom : confirmPasswordTextField.snp.bottom
+        passwordFieldBottomAnchor = bottomAnchor
+        
+        authActionButton.setTitle(mode == .login ? "로그인" : "회원가입", for: .normal)
         authSwitchLabel.text = mode == .login ? "아직 회원이 아니신가요?" : "이미 계정이 있으신가요?"
         authSwitchButton.setTitle(mode == .login ? "회원가입" : "로그인", for: .normal)
+        
+        authActionButton.snp.remakeConstraints {
+            $0.top.equalTo(bottomAnchor).offset(32)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(60)
+        }
     }
     
     private func setupViews() {
-        [
-            confirmPasswordLabel,
-            confirmPasswordTextField,
-            confirmPasswordValidationLabel
-        ].forEach { confirmPasswordStackView.addArrangedSubview($0) }
+//        [
+//            confirmPasswordLabel,
+//            confirmPasswordTextField,
+//            confirmPasswordValidationLabel
+//        ].forEach { confirmPasswordStackView.addArrangedSubview($0) }
         
         [
             authSwitchLabel,
@@ -208,7 +226,10 @@ final class AuthView: UIView {
             passwordLabel,
             passwordTextField,
             passwordValidationLabel,
-            confirmPasswordStackView,
+//            confirmPasswordStackView,
+            confirmPasswordLabel,
+            confirmPasswordTextField,
+            confirmPasswordValidationLabel,
             authActionButton,
             authSwitchStackView
         ].forEach { addSubview($0) }
@@ -226,11 +247,12 @@ final class AuthView: UIView {
         
         emailValidationLabel.snp.makeConstraints {
             $0.top.equalTo(emailTextField.snp.bottom).offset(4)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(8)
+            $0.trailing.equalToSuperview()
         }
         
         passwordLabel.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(20)
+            $0.top.equalTo(emailTextField.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -241,23 +263,37 @@ final class AuthView: UIView {
         
         passwordValidationLabel.snp.makeConstraints {
             $0.top.equalTo(passwordTextField.snp.bottom).offset(4)
+            $0.leading.equalToSuperview().offset(8)
+            $0.trailing.equalToSuperview()
+        }
+        
+        confirmPasswordLabel.snp.makeConstraints {
+            $0.top.equalTo(passwordTextField.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        confirmPasswordTextField.snp.makeConstraints {
+            $0.top.equalTo(confirmPasswordLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
         
         confirmPasswordValidationLabel.snp.makeConstraints {
             $0.top.equalTo(confirmPasswordTextField.snp.bottom).offset(4)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(8)
+            $0.trailing.equalToSuperview()
         }
         
-        confirmPasswordStackView.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview()
-        }
+//        confirmPasswordStackView.snp.makeConstraints {
+//            $0.top.equalTo(passwordTextField.snp.bottom).offset(24)
+//            $0.leading.trailing.equalToSuperview()
+//        }
         
-        authActionButton.snp.makeConstraints {
-            $0.top.equalTo(confirmPasswordStackView.snp.bottom).offset(32)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(60)
+        if let bottomAnchor = passwordFieldBottomAnchor {
+            authActionButton.snp.makeConstraints {
+                $0.top.equalTo(bottomAnchor).offset(32)
+                $0.leading.trailing.equalToSuperview()
+                $0.height.equalTo(60)
+            }
         }
         
         authSwitchStackView.snp.makeConstraints {
