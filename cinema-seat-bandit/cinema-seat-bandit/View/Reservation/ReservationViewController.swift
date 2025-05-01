@@ -65,7 +65,7 @@ class ReservationViewController: UIViewController {
                     )
                     alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
                         let myPageVC = MyPageViewController()
-                        self.navigationController?.pushViewController(myPageVC, animated: true)
+                        self.navigationController?.pushViewController(myPageVC, animated: false)
                     })
                     self.present(alert, animated: true)
                 case .failure(let error):
