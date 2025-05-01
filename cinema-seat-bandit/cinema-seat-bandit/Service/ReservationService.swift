@@ -28,36 +28,36 @@ enum ReservationError: LocalizedError {
 
 struct ReservationModel {
     let movieTitle: String
-    let plot: String
+    let overview: String
     let posterImageURL: String
     let createdAt: Date
     
     var dictionary: [String: Any] {
         return [
             "movieTitle": movieTitle,
-            "plot": plot,
+            "overview": overview,
             "posterImageURL": posterImageURL,
             "createdAt": Timestamp(date: createdAt)
         ]
     }
     
-    init(movieTitle: String, plot: String, posterImageURL: String, createdAt: Date = Date()) {
+    init(movieTitle: String, overview: String, posterImageURL: String, createdAt: Date = Date()) {
         self.movieTitle = movieTitle
-        self.plot = plot
+        self.overview = overview
         self.posterImageURL = posterImageURL
         self.createdAt = createdAt
     }
     
     init?(dictionary: [String: Any]) {
         guard let movieTitle = dictionary["movieTitle"] as? String,
-              let plot = dictionary["plot"] as? String,
+              let overview = dictionary["overview"] as? String,
               let posterImageURL = dictionary["posterImageURL"] as? String,
               let createdAt = dictionary["createdAt"] as? Timestamp else {
             return nil
         }
         
         self.movieTitle = movieTitle
-        self.plot = plot
+        self.overview = overview
         self.posterImageURL = posterImageURL
         self.createdAt = createdAt.dateValue()
     }
@@ -69,7 +69,7 @@ final class ReservationService {
     
     private init() {}
     
-    func saveReservation(movieTitle: String, plot: String, posterImageURL: String, completion: ((Result<Void, ReservationError>) -> Void)? = nil) {
+    func saveReservation(movieTitle: String, overview: String, posterImageURL: String, completion: ((Result<Void, ReservationError>) -> Void)? = nil) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion?(.failure(.notLoggedIn))
             return
@@ -77,7 +77,7 @@ final class ReservationService {
         
         let data = ReservationModel(
             movieTitle: movieTitle,
-            plot: plot,
+            overview: overview,
             posterImageURL: posterImageURL
         )
         
