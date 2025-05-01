@@ -42,10 +42,11 @@ final class AuthView: UIView {
     }()
     
     let emailTextField: UITextField = {
-        let textField = PaddedTextField()
-        textField.placeholder = "이메일을 입력하세요."
-        textField.borderStyle = .roundedRect
-        return textField
+        let tf = PaddedTextField()
+        tf.keyboardType = .emailAddress
+        tf.placeholder = "이메일을 입력하세요."
+        tf.borderStyle = .roundedRect
+        return tf
     }()
     
     private let passwordLabel: UILabel = {
@@ -55,10 +56,10 @@ final class AuthView: UIView {
     }()
     
     let passwordTextField: UITextField = {
-        let textField = PaddedTextField()
-        textField.placeholder = "비밀번호를 입력하세요."
-        textField.borderStyle = .roundedRect
-        return textField
+        let tf = PaddedTextField()
+        tf.placeholder = "비밀번호를 입력하세요."
+        tf.borderStyle = .roundedRect
+        return tf
     }()
     
     private let passwordToggleButton: UIButton = {
