@@ -19,7 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let _ = Auth.auth().currentUser {
             window.rootViewController = tabBarController
         } else {
-            window.rootViewController = AuthViewController()
+            let nav = UINavigationController(rootViewController: AuthViewController())
+            window.rootViewController = nav
         }
 //        window.rootViewController = TestReservationViewController()
         window.makeKeyAndVisible()
