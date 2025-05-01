@@ -7,7 +7,7 @@
 import UIKit
 import SnapKit
 
-class MovieSearchViewController: ViewController {
+class MovieSearchViewController: UIViewController {
 
     private var movies: [Movie] = []
 
