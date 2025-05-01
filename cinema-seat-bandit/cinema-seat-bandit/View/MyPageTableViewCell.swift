@@ -87,6 +87,7 @@ final class MyPageTableViewCell: UITableViewCell {
         
         setupViews()
         setupConstraints()
+        setupActions()
     }
     
     @available(*, unavailable)

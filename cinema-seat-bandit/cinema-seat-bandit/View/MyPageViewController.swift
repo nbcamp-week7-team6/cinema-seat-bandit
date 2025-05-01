@@ -133,6 +133,34 @@ extension MyPageViewController: UITableViewDataSource {
         
         cell.configure(with: reservation)
         
+        cell.onDetailButtonTapped = { [weak self] in
+            let detailVC = MovieDetailViewController()
+            detailVC.movie = reservation.toMovie()
+            self?.navigationController?.pushViewController(detailVC, animated: true)
+        }
+        
         return cell
+    }
+}
+
+extension ReservationModel {
+    func toMovie() -> Movie {
+        return Movie(
+            id: -1,
+            backdrop_path: nil,
+            title: movieTitle,
+            original_title: movieTitle,
+            overview: overview,
+            poster_path: posterImageURL,
+            media_type: "movie",
+            adult: false,
+            original_language: "ko",
+            genre_ids: [],
+            popularity: 0.0,
+            release_date: nil,
+            video: false,
+            vote_average: 0.0,
+            vote_count: 0
+        )
     }
 }
