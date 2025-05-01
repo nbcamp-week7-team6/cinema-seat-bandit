@@ -27,6 +27,11 @@ final class PaddedTextField: UITextField {
     override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: padding)
     }
+    
+    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        let defaultRect = super.rightViewRect(forBounds: bounds)
+        return defaultRect.offsetBy(dx: -8, dy: 0)
+    }
 }
 
 final class AuthView: UIView {
@@ -56,6 +61,13 @@ final class AuthView: UIView {
         return textField
     }()
     
+    private let passwordToggleButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        button.tintColor = .gray
+        return button
+    }()
+    
     private let confirmPasswordLabel: UILabel = {
         let label = UILabel()
         label.text = "비밀번호 확인"
@@ -67,6 +79,13 @@ final class AuthView: UIView {
         textField.placeholder = "비밀번호를 다시 입력하세요."
         textField.borderStyle = .roundedRect
         return textField
+    }()
+    
+    private let confirmPasswordToggleButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        button.tintColor = .gray
+        return button
     }()
     
     private let confirmPasswordStackView: UIStackView = {
@@ -119,6 +138,7 @@ final class AuthView: UIView {
         setupViews()
         setupConstraints()
         updateViewForMode()
+        setupPasswordSecure()
     }
     
     @available(*, unavailable)
@@ -191,5 +211,30 @@ final class AuthView: UIView {
             $0.bottom.equalToSuperview().inset(32)
             $0.centerX.equalToSuperview()
         }
+    }
+    
+    private func setupPasswordSecure() {
+        passwordTextField.isSecureTextEntry = true
+        confirmPasswordTextField.isSecureTextEntry = true
+        
+        passwordTextField.rightView = passwordToggleButton
+        passwordTextField.rightViewMode = .always
+        confirmPasswordTextField.rightView = confirmPasswordToggleButton
+        confirmPasswordTextField.rightViewMode = .always
+        
+        passwordToggleButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        confirmPasswordToggleButton.addTarget(self, action: #selector(toggleConfirmPasswordVisibility), for: .touchUpInside)
+    }
+    
+    @objc private func togglePasswordVisibility() {
+        passwordTextField.isSecureTextEntry.toggle()
+        let imageName = passwordTextField.isSecureTextEntry ? "eye.fill" : "eye.slash.fill"
+        passwordToggleButton.setImage(UIImage(systemName: imageName), for: .normal)
+    }
+    
+    @objc private func toggleConfirmPasswordVisibility() {
+        confirmPasswordTextField.isSecureTextEntry.toggle()
+        let imageName = confirmPasswordTextField.isSecureTextEntry ? "eye.fill" : "eye.slash.fill"
+        confirmPasswordToggleButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
 }
