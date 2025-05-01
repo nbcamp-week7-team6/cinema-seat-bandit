@@ -7,7 +7,7 @@
 import UIKit
 import SnapKit
 
-class MovieSearchViewController: ViewController {
+class MovieSearchViewController: UIViewController {
 
     private var movies: [Movie] = []
 
@@ -93,8 +93,8 @@ extension MovieSearchViewController: UICollectionViewDelegate, UICollectionViewD
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt IndexPath: IndexPath) {
-        let movie = movies[IndexPath.item]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let movie = movies[indexPath.item]
         let detailVC = MovieDetailViewController()
         detailVC.movie = movie
         self.navigationController?.pushViewController(detailVC, animated: true)

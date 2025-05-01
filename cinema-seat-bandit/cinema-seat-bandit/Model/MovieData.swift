@@ -6,7 +6,7 @@ struct TrendingResponse: Decodable {
     let total_results: Int
 }
 
-struct UpcommingResponse: Decodable {
+struct UpcomingResponse: Decodable {
     let page: Int
     let results: [Movie]
     let total_pages: Int
