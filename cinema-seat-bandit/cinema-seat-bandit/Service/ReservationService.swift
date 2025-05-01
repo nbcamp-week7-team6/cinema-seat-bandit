@@ -26,50 +26,13 @@ enum ReservationError: LocalizedError {
     }
 }
 
-struct ReservationModel {
-    let movieTitle: String
-    let overview: String
-    let posterImageURL: String
-    let createdAt: Date
-    
-    var dictionary: [String: Any] {
-        return [
-            "movieTitle": movieTitle,
-            "overview": overview,
-            "posterImageURL": posterImageURL,
-            "createdAt": Timestamp(date: createdAt)
-        ]
-    }
-    
-    init(movieTitle: String, overview: String, posterImageURL: String, createdAt: Date = Date()) {
-        self.movieTitle = movieTitle
-        self.overview = overview
-        self.posterImageURL = posterImageURL
-        self.createdAt = createdAt
-    }
-    
-    init?(dictionary: [String: Any]) {
-        guard let movieTitle = dictionary["movieTitle"] as? String,
-              let overview = dictionary["overview"] as? String,
-              let posterImageURL = dictionary["posterImageURL"] as? String,
-              let createdAt = dictionary["createdAt"] as? Timestamp else {
-            return nil
-        }
-        
-        self.movieTitle = movieTitle
-        self.overview = overview
-        self.posterImageURL = posterImageURL
-        self.createdAt = createdAt.dateValue()
-    }
-}
-
 final class ReservationService {
     static let shared = ReservationService()
     private let db = Firestore.firestore()
     
     private init() {}
     
-    func saveReservation(movieTitle: String, overview: String, posterImageURL: String, completion: ((Result<Void, ReservationError>) -> Void)? = nil) {
+    func saveReservation(movieTitle: String, overview: String, posterImageURL: String, screeningDateString: String, completion: ((Result<Void, ReservationError>) -> Void)? = nil) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion?(.failure(.notLoggedIn))
             return
@@ -78,7 +41,8 @@ final class ReservationService {
         let data = ReservationModel(
             movieTitle: movieTitle,
             overview: overview,
-            posterImageURL: posterImageURL
+            posterImageURL: posterImageURL,
+            screeningDateString: screeningDateString
         )
         
         db.collection("users").document(uid)

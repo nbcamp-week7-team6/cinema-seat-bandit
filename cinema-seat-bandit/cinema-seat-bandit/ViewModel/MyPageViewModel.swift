@@ -17,14 +17,17 @@ final class MyPageViewModel: ViewModelProtocol {
     struct Output {
         let userEmail: Observable<String>
         let logoutSuccess: Observable<Bool>
+        let reservations: Observable<[ReservationModel]>
     }
     
     private let email = Observable<String>("")
     private let logoutState = Observable<Bool>(false)
+    private let reservationList = Observable<[ReservationModel]>([])
     
     func transform(input: Input) -> Output {
         input.didLoadView.bind { [weak self] _ in
             self?.fetchUserEmail()
+            self?.fetchReservations()
         }
         
         input.didTapLogout.bind { [weak self] event in
@@ -34,13 +37,25 @@ final class MyPageViewModel: ViewModelProtocol {
         
         return Output(
             userEmail: email,
-            logoutSuccess: logoutState
+            logoutSuccess: logoutState,
+            reservations: reservationList
         )
     }
     
     private func fetchUserEmail() {
         if let email = Auth.auth().currentUser?.email {
             self.email.value = email
+        }
+    }
+    
+    private func fetchReservations() {
+        ReservationService.shared.fetchReservations { [weak self] result in
+            switch result {
+            case .success(let reservations):
+                self?.reservationList.value = reservations
+            case .failure(let error):
+                print("예약 불러오기 실패: \(error.localizedDescription)")
+            }
         }
     }
     
