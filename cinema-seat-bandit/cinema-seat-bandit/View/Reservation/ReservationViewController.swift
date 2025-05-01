@@ -39,6 +39,8 @@ class ReservationViewController: UIViewController {
         // 2. 두 번째 뷰 콜백
         secondProcess.onReserveCompleted = { [weak self] date, time in
             self?.transitionToFinalProcess(date: date, time: time)
+            self?.selectedDate = date // ✅ 추가: 선택된 날짜 저장
+            self?.selectedTime = time // ✅ 추가: 선택된 시간 저장
         }
         secondProcess.onPreviousButtonTapped = { [weak self] in
             self?.transitionToFirstProcess()
@@ -47,6 +49,7 @@ class ReservationViewController: UIViewController {
         // 예매 확정(예매하기) 버튼 액션
         finalProcess.onConfirmTapped = { [weak self] in
             guard let self = self else { return }
+            print("[ReservationVC] Firestore 저장 전 screeningDateString: \(self.selectedDate ?? "nil")") // 테스트
             ReservationService.shared.saveReservation(
                 movieTitle: self.movieTitle ?? "",
                 overview: self.movieOverview ?? "",
