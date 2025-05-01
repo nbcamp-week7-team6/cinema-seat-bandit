@@ -62,7 +62,6 @@ final class MyPageViewModel: ViewModelProtocol {
     private func logout() {
         do {
             try Auth.auth().signOut()
-            print("로그아웃 버튼 눌림")
             self.logoutState.value = true
         } catch {
             print("로그아웃 실패: \(error.localizedDescription)")
