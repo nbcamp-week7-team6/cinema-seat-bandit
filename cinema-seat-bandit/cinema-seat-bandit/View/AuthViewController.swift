@@ -86,14 +86,8 @@ final class AuthViewController: UIViewController {
             
             let (type, message) = authError
             
-            switch type {
-            case .signup:
-                print("회원가입 실패: \(message)")
-                // 회원가입 실패 이후 수행할 작업
-            case .login:
-                print("로그인 실패: \(message)")
-                // 로그인 실패 이후 수행할 작업
-            }
+            let title = type == .signup ? "회원가입 실패" : "로그인 실패"
+            self.showErrorAlert(title: title, message: message)
         }
     }
     
@@ -183,5 +177,11 @@ final class AuthViewController: UIViewController {
             window.rootViewController = tabBarController
             window.makeKeyAndVisible()
         }
+    }
+    
+    private func showErrorAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }
