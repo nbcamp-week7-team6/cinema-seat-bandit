@@ -24,7 +24,7 @@ final class MovieCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 14)
-        label.numberOfLines = 2
+        label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
         return label
     }()
@@ -60,9 +60,15 @@ final class MovieCell: UICollectionViewCell {
         fatalError()
     }
 
-    func configure(with movie: Movie) {
+    func configure(with movie: Movie, showVoteAverage: Bool) {
         titleLabel.text = movie.title
-        ratingLabel.text = "⭐️ \(String(format: "%.1f", movie.vote_average))"
+        if showVoteAverage {
+            ratingLabel.isHidden = false
+            ratingLabel.text = "⭐️ \(String(format: "%.1f", movie.vote_average))"
+        } else {
+            ratingLabel.isHidden = true
+            ratingLabel.text = nil
+        }
 
         if let posterPath = movie.poster_path {
             let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
