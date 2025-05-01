@@ -10,6 +10,9 @@ class ReservationViewController: UIViewController {
     var moviePoster: UIImage?
     var movieTitle: String?
     var movieOverview: String?
+    var moviePosterURL: String?
+    var selectedDate: String?
+    var selectedTime: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,18 +44,37 @@ class ReservationViewController: UIViewController {
             self?.transitionToFirstProcess()
         }
         
-        // 3. 최종 뷰 콜백
+        // 예매 확정(예매하기) 버튼 액션
         finalProcess.onConfirmTapped = { [weak self] in
-            let alert = UIAlertController(
-                title: "예매 완료",
-                message: "영화 예매가 완료되었습니다.",
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
-                let myPageVC = MyPageViewController()
-                self?.navigationController?.pushViewController(myPageVC, animated: true)
-            })
-            self?.present(alert, animated: true)
+            guard let self = self else { return }
+            ReservationService.shared.saveReservation(
+                movieTitle: self.movieTitle ?? "",
+                overview: self.movieOverview ?? "",
+                posterImageURL: self.moviePosterURL ?? "",
+                screeningDateString: self.selectedDate ?? ""
+            ) { result in
+                switch result {
+                case .success():
+                    let alert = UIAlertController(
+                        title: "예매 완료",
+                        message: "영화 예매가 완료되었습니다.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+                        let myPageVC = MyPageViewController()
+                        self.navigationController?.pushViewController(myPageVC, animated: true)
+                    })
+                    self.present(alert, animated: true)
+                case .failure(let error):
+                    let alert = UIAlertController(
+                        title: "오류",
+                        message: error.localizedDescription,
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "확인", style: .default))
+                    self.present(alert, animated: true)
+                }
+            }
         }
     }
     

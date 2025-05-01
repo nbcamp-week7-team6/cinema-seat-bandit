@@ -1,16 +1,10 @@
 import Foundation
 
-protocol MovieDetailViewModelProtocol {
-    associatedtype Input
-    associatedtype Output
-    func transform(input: Input) -> Output
-}
-
-final class MovieDetailViewModel: MovieDetailViewModelProtocol {
+final class MovieDetailViewModel: ViewModelProtocol {
     
-    private let titleSubject = Observable<String>("")
-    private let posterSubject = Observable<String?>(nil)
-    private let plotSubject = Observable<String>("")
+    private(set) var titleSubject = Observable<String>("")
+    private(set) var posterSubject = Observable<String?>(nil)
+    private(set) var plotSubject = Observable<String>("")
     
     struct Input {
         let reservateButtonClick: Observable<Void>

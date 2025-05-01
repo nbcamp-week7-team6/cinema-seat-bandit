@@ -45,6 +45,8 @@ final class ReservationService {
             screeningDateString: screeningDateString
         )
         
+        print(data.screeningDate) //Test
+        
         db.collection("users").document(uid)
             .collection("reservations")
             .addDocument(data: data.dictionary) { error in
