@@ -3,6 +3,7 @@ import SnapKit
 
 final class MovieListViewController: UIViewController {
 
+
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
@@ -23,7 +24,6 @@ final class MovieListViewController: UIViewController {
     private let upcomingSection = MovieSectionView(title: "Upcoming")
 
     override func viewDidLoad() {
-        print("MovieListViewController 실행 확인")
         super.viewDidLoad()
         view.backgroundColor = .white
         setupViews()
