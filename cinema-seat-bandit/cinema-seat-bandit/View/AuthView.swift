@@ -52,6 +52,14 @@ final class AuthView: UIView {
         return tf
     }()
     
+    private let emailValidationLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .systemRed
+        label.isHidden = true
+        return label
+    }()
+    
     private let passwordLabel: UILabel = {
         let label = UILabel()
         label.text = "비밀번호"
@@ -75,6 +83,14 @@ final class AuthView: UIView {
         return button
     }()
     
+    private let passwordValidationLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .systemRed
+        label.isHidden = true
+        return label
+    }()
+    
     private let confirmPasswordLabel: UILabel = {
         let label = UILabel()
         label.text = "비밀번호 확인"
@@ -96,6 +112,14 @@ final class AuthView: UIView {
         button.setImage(UIImage(systemName: "eye.fill"), for: .normal)
         button.tintColor = .gray
         return button
+    }()
+    
+    private let confirmPasswordValidationLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .systemRed
+        label.isHidden = true
+        return label
     }()
     
     private let confirmPasswordStackView: UIStackView = {
@@ -169,6 +193,7 @@ final class AuthView: UIView {
         [
             confirmPasswordLabel,
             confirmPasswordTextField,
+            confirmPasswordValidationLabel
         ].forEach { confirmPasswordStackView.addArrangedSubview($0) }
         
         [
@@ -179,8 +204,10 @@ final class AuthView: UIView {
         [
             emailLabel,
             emailTextField,
+            emailValidationLabel,
             passwordLabel,
             passwordTextField,
+            passwordValidationLabel,
             confirmPasswordStackView,
             authActionButton,
             authSwitchStackView
@@ -197,6 +224,11 @@ final class AuthView: UIView {
             $0.leading.trailing.equalToSuperview()
         }
         
+        emailValidationLabel.snp.makeConstraints {
+            $0.top.equalTo(emailTextField.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
         passwordLabel.snp.makeConstraints {
             $0.top.equalTo(emailTextField.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
@@ -204,6 +236,16 @@ final class AuthView: UIView {
         
         passwordTextField.snp.makeConstraints {
             $0.top.equalTo(passwordLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        passwordValidationLabel.snp.makeConstraints {
+            $0.top.equalTo(passwordTextField.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        confirmPasswordValidationLabel.snp.makeConstraints {
+            $0.top.equalTo(confirmPasswordTextField.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview()
         }
         
