@@ -12,6 +12,8 @@ import Kingfisher
 final class MyPageTableViewCell: UITableViewCell {
     static let identifier = "MyPageTableViewCell"
     
+    var onDetailButtonTapped: (() -> Void)?
+    
     private let reservationDateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .regular)
@@ -140,6 +142,14 @@ final class MyPageTableViewCell: UITableViewCell {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
+    }
+    
+    private func setupActions() {
+        detailButton.addTarget(self, action: #selector(detailButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func detailButtonTapped() {
+        onDetailButtonTapped?()
     }
     
     func configure(with reservation: ReservationModel) {
