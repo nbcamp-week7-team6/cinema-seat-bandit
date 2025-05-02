@@ -14,6 +14,7 @@ class MovieSearchViewController: UIViewController {
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "제목으로 검색해주세요."
+        searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         return searchBar
     }()
 
@@ -57,7 +58,7 @@ class MovieSearchViewController: UIViewController {
         }
     }
 
-    private func searchMovieUsingAPI(query: String, page: Int = 3) {
+    private func searchMovieUsingAPI(query: String, page: Int = 1) {
         NetworkManager.shared.request(api: .search(query: query, page: page)) {
             (result: Result<SearchResponse, Error>) in
             switch result {
