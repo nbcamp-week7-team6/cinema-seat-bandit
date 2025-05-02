@@ -20,8 +20,8 @@ class MovieSearchViewController: UIViewController {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let spacing: CGFloat = 10
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
+        layout.minimumLineSpacing = 5
+        layout.minimumInteritemSpacing = 5
         layout.scrollDirection = .vertical
         let width = (UIScreen.main.bounds.width - (spacing * 4)) / 3
         layout.itemSize = CGSize(width: width, height: width * 1.5 + 40)
@@ -37,7 +37,7 @@ class MovieSearchViewController: UIViewController {
         setupLayout()
         setupCollectionView()
         searchBar.delegate = self
-        searchMovieUsingAPI(query: "마인")
+        searchMovieUsingAPI(query: "굿")
 
     }
 
