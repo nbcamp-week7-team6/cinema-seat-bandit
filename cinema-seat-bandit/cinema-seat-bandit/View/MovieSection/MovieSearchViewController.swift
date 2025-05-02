@@ -62,21 +62,6 @@ class MovieSearchViewController: UIViewController {
         }
     }
 
-//    private func searchMovieUsingAPI(query: String, page: Int = 3) {
-//        NetworkManager.shared.request(api: .search(query: query, page: page)) {
-//            (result: Result<SearchResponse, Error>) in
-//            switch result {
-//            case .success(let response):
-//                self.movies = response.results
-//                DispatchQueue.main.async {
-//                    self.collectionView.reloadData()
-//                }
-//            case .failure(let error):
-//                print("에러 발생: \(error.localizedDescription)")
-//            }
-//        }
-//    }
-
     private func searchMovieUsingAPI(query: String, page: Int = 1) {
         guard !isLoading else { return }
         isLoading = true
@@ -113,7 +98,7 @@ class MovieSearchViewController: UIViewController {
         let height = scrollView.frame.size.height
 
         if offsetY > contentHeight - height - 100 {
-            // 페이지 더 요청
+
             if !isLoading && currentPage < totalPages {
                 let nextPage = currentPage + 1
                 searchMovieUsingAPI(query: currentQuery, page: nextPage)
@@ -155,9 +140,6 @@ extension MovieSearchViewController: UICollectionViewDelegate, UICollectionViewD
 extension MovieSearchViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        guard let query = searchBar.text, !query.isEmpty else { return }
-//        searchMovieUsingAPI(query: query)
-
         guard let query = searchBar.text, !query.isEmpty else { return }
             currentPage = 1
             totalPages = 1
