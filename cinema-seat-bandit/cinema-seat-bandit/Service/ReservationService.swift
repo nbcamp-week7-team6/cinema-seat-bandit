@@ -45,6 +45,9 @@ final class ReservationService {
             screeningDateString: screeningDateString
         )
         
+        print("[ReservationService] ReservationModel 생성 시 screeningDateString: \(screeningDateString)") // 테스트
+        print("[ReservationService] ReservationModel screeningDate: \(data.screeningDate)") // 테스트
+        
         db.collection("users").document(uid)
             .collection("reservations")
             .addDocument(data: data.dictionary) { error in
