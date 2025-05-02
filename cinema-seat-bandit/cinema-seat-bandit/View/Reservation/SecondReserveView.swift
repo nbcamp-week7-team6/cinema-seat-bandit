@@ -120,6 +120,7 @@ class SecondReserveView: UIView {
         else { return }
         
         // 콜백으로 넘기기
+        print("[SecondReserveView] 선택된 screeningDateString: \(date)") // 테스트
         onReserveCompleted?(date, time)
     }
     

@@ -96,6 +96,7 @@ class MovieDetailViewController: UIViewController {
         reservationVC.moviePoster = moviePoster.image
         reservationVC.movieTitle = movie?.title
         reservationVC.movieOverview = movie?.overview
+        reservationVC.moviePosterURL = viewModel.posterSubject.value
 
     }
     

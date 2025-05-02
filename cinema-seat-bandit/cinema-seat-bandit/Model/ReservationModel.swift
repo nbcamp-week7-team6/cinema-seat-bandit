@@ -56,9 +56,11 @@ struct ReservationModel {
     }
     
     private static func parseDate(from rawString: String) -> Date {
+        print("[ReservationModel] parseDate 입력값: \(rawString)") // 테스트
         let cleanedString = rawString.components(separatedBy: "\n").first ?? rawString
         let year = Calendar.current.component(.year, from: Date())
         let fullDateString = "\(year)년 \(cleanedString)"
+        print("[ReservationModel] fullDateString: \(fullDateString)") // 테스트
         
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
