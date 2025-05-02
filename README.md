@@ -48,7 +48,7 @@
 | [윤주형](https://github.com/youseokhwan) | [김신영](https://github.com/SongKyuSeob) | [고욱현](https://github.com/imo2k) |
 |:-----:|:-----:|:-----:|
 | 팀장 👑 | 팀원 👨🏻‍💻 | 팀원 👨🏻‍💻 |
-| 영화 목록<br/>영화 검색 | 파이어베이스<br/>로그인·회원가입<br/>마이페이지·예매내역 | 영화 상세 정보<br/>영화 예매<br/>네트워크 구성 |
+| 영화 목록<br/>영화 검색<br/>TabBar | FireBase인프라<br/>로그인·회원가입<br/>마이페이지·예매내역 | 영화 상세 정보<br/>영화 예매<br/>Network 구성 |
 
 </div>
 
