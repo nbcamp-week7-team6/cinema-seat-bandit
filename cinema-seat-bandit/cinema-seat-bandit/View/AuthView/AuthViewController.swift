@@ -36,6 +36,30 @@ final class AuthViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        viewModel.isEmailValid.bind { [weak self] isValid in
+            guard let self else { return }
+            
+            let isEmpty = self.authView.emailTextField.text?.isEmpty ?? true
+            self.authView.emailValidationLabel.isHidden = isValid || isEmpty
+            self.authView.emailValidationLabel.text = isValid ? nil : "올바른 이메일 형식이 아닙니다."
+        }
+        
+        viewModel.isPasswordValid.bind { [weak self] isValid in
+            guard let self else { return }
+            
+            let isEmpty = self.authView.passwordValidationLabel.text?.isEmpty ?? true
+            self.authView.passwordValidationLabel.isHidden = isValid || isEmpty
+            self.authView.passwordValidationLabel.text = isValid ? nil : "비밀번호는 8자 이상이어야 합니다."
+        }
+        
+        viewModel.isPasswordMatch.bind { [weak self] isMatch in
+            guard let self else { return }
+            
+            let isEmpty = self.authView.confirmPasswordValidationLabel.text?.isEmpty ?? true
+            self.authView.confirmPasswordValidationLabel.isHidden = isMatch || isEmpty
+            self.authView.confirmPasswordValidationLabel.text = isMatch ? nil : "비밀번호가 일치하지 않습니다."
+        }
+        
         viewModel.isFormValid.bind { [weak self] isValid in
             self?.authView.authActionButton.isEnabled = isValid
             self?.authView.authActionButton.alpha = isValid ? 1.0 : 0.1
@@ -62,14 +86,8 @@ final class AuthViewController: UIViewController {
             
             let (type, message) = authError
             
-            switch type {
-            case .signup:
-                print("회원가입 실패: \(message)")
-                // 회원가입 실패 이후 수행할 작업
-            case .login:
-                print("로그인 실패: \(message)")
-                // 로그인 실패 이후 수행할 작업
-            }
+            let title = type == .signup ? "회원가입 실패" : "로그인 실패"
+            self.showErrorAlert(title: title, message: message)
         }
     }
     
@@ -159,5 +177,11 @@ final class AuthViewController: UIViewController {
             window.rootViewController = tabBarController
             window.makeKeyAndVisible()
         }
+    }
+    
+    private func showErrorAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }

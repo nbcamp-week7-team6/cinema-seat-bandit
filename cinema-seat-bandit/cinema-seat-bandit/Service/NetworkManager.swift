@@ -41,7 +41,6 @@ class NetworkManager {
         completion: @escaping (Result<T, Error>) -> Void
     ) {
 
-        print("api 확인: \(api.endPoint.absoluteString)")
 
         AF.request(api.endPoint, method: api.method, headers: api.header)
             .validate()

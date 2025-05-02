@@ -22,7 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let nav = UINavigationController(rootViewController: AuthViewController())
             window.rootViewController = nav
         }
-//        window.rootViewController = TestReservationViewController()
         window.makeKeyAndVisible()
         self.window = window
     }

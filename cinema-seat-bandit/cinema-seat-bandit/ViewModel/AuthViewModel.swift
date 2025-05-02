@@ -16,9 +16,9 @@ enum AuthErrorType {
 final class AuthViewModel {
     var mode: AuthMode = .login
     
-    private let isEmailValid = Observable<Bool>(false)
-    private let isPasswordValid = Observable<Bool>(false)
-    private let isPasswordMatch = Observable<Bool>(false)
+    let isEmailValid = Observable<Bool>(false)
+    let isPasswordValid = Observable<Bool>(false)
+    let isPasswordMatch = Observable<Bool>(false)
     let isFormValid = Observable<Bool>(false)
     
     let signupSuccess = Observable<Bool>(false)
